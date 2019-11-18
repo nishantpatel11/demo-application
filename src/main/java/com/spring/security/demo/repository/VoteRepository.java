@@ -16,11 +16,13 @@ import com.spring.security.demo.model.Vote;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Long> {
 	
-	@Query("SELECT new com.example.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
-	List<ChoiceVoteCount> countByPollIdInGroupByChoiceId(@Param("pollIds") List<Long> pollIds);
+//	@Query("SELECT new com.example.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
+	@Query("SELECT v FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
+	List<Vote> countByPollIdInGroupByChoiceId(@Param("pollIds") List<Long> pollIds);
 
-	@Query("SELECT new com.example.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id = :pollId GROUP BY v.choice.id")
-	List<ChoiceVoteCount> countByPollIdGroupByChoiceId(@Param("pollId") Long pollId);
+//	@Query("SELECT new com.example.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id = :pollId GROUP BY v.choice.id")
+	@Query("SELECT v FROM Vote v WHERE v.poll.id = :pollId GROUP BY v.choice.id")
+	List<Vote> countByPollIdGroupByChoiceId(@Param("pollId") Long pollId);
 
 	@Query("SELECT v FROM Vote v where v.user.id = :userId and v.poll.id in :pollIds")
 	List<Vote> findByUserIdAndPollIdIn(@Param("userId") Long userId, @Param("pollIds") List<Long> pollIds);
