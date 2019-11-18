@@ -27,7 +27,7 @@ import com.spring.security.demo.service.PollService;
 import com.spring.security.demo.util.AppConstants;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(AppConstants.API+AppConstants.USER)
 public class UserController {
 
 	@Autowired
@@ -44,26 +44,26 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@GetMapping("/user/me")
+	@GetMapping(AppConstants.ME)
 	@PreAuthorize("hasRole('USER')")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
 		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
 		return userSummary;
 	}
 
-	@GetMapping("/user/checkUsernameAvailability")
+	@GetMapping(AppConstants.CHECKUSERNAMEAVAILABILITY)
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
 		Boolean isAvailable = !userRepository.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/user/checkEmailAvailability")
+	@GetMapping(AppConstants.CHECKEMAILAVAILABILITY)
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 		Boolean isAvailable = !userRepository.existsByEmail(email);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/users/{username}")
+	@GetMapping("/{username}")
 	public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -76,7 +76,7 @@ public class UserController {
 		return userProfile;
 	}
 
-	@GetMapping("/users/{username}/polls")
+	@GetMapping("/{username}"+AppConstants.POLLS)
 	public PagedResponse<PollResponse> getPollsCreatedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -85,7 +85,7 @@ public class UserController {
 	}
 
 
-	@GetMapping("/users/{username}/votes")
+	@GetMapping("/{username}"+AppConstants.VOTES)
 	public PagedResponse<PollResponse> getPollsVotedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,

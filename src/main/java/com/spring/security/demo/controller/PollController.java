@@ -31,7 +31,7 @@ import com.spring.security.demo.util.AppConstants;
 
 
 @RestController
-@RequestMapping("/api/polls")
+@RequestMapping(AppConstants.API+AppConstants.POLLS)
 public class PollController {
 
 	@Autowired
@@ -64,7 +64,7 @@ public class PollController {
 		return pollService.getPollById(pollId, currentUser);
 	}
 
-	@PostMapping("/{pollId}/votes")
+	@PostMapping("/{pollId}"+AppConstants.VOTES)
 	@PreAuthorize("hasRole('USER')")
 	public PollResponse castVote(@CurrentUser UserPrincipal currentUser,
 			@PathVariable Long pollId,

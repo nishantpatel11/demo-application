@@ -31,9 +31,10 @@ import com.spring.security.demo.payload.SignUpRequest;
 import com.spring.security.demo.repository.RoleRepository;
 import com.spring.security.demo.repository.UserRepository;
 import com.spring.security.demo.security.JwtTokenProvider;
+import com.spring.security.demo.util.AppConstants;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(AppConstants.BASE_URL_AUTH)
 public class AuthController {
 	  @Autowired
 	    AuthenticationManager authenticationManager;
@@ -50,7 +51,7 @@ public class AuthController {
 	    @Autowired
 	    JwtTokenProvider tokenProvider;
 
-	    @PostMapping("/signin")
+	    @PostMapping(AppConstants.SIGNIN)
 	    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 	        Authentication authentication = authenticationManager.authenticate(
@@ -66,7 +67,7 @@ public class AuthController {
 	        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 	    }
 
-	    @PostMapping("/signup")
+	    @PostMapping(AppConstants.SIGNUP)
 	    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 	        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
 	            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
